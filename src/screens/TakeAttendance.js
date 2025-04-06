@@ -16,40 +16,49 @@ import {
 } from "firebase/firestore";
 import { db } from "../../config/firebase";
 import AttendanceModal from "../components/AttendanceModal";
+import { useLoading } from "../hooks/useLoading";
 
 const Attendance = ({ navigation }) => {
   const [showModal, setShowModal] = useState(false); // control modal visibility
   const [students, setStudents] = useState([]); // array of student objects
   const [presentStudents, setPresentStudents] = useState([]); // array of present student ids
+  const { withLoading } = useLoading();
 
   const getStudents = async () => {
     try {
-      // query to fetch only student data
-      const q = query(
-        collection(db, "users"),
-        where("role", "==", "parent"),
-        orderBy("roll_no", "asc")
-      );
+      await withLoading(async () => {
+        // query to fetch only student data
+        const q = query(
+          collection(db, "users"),
+          where("role", "==", "parent"),
+          orderBy("roll_no", "asc")
+        );
 
-      // fetching all the documents
-      const querySnapshot = await getDocs(q);
+        // fetching all the documents
+        const querySnapshot = await getDocs(q);
 
-      // extracting the data from the documents
-      const items = querySnapshot.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-      }));
+        // extracting the data from the documents
+        const items = querySnapshot.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        }));
 
-      // setting the students
-      setStudents(items);
+        // setting the students
+        setStudents(items);
 
-      //get id of all students
-      const ids = items.map((student) => student.id);
+        //get id of all students
+        const ids = items.map((student) => student.id);
 
-      // set the present students
-      setPresentStudents(ids);
+        // set the present students
+        setPresentStudents(ids);
+      });
     } catch (error) {
       console.log(error);
+      Alert.alert("Error", "Failed to fetch students", [
+        {
+          text: "OK",
+        },
+      ]);
     }
   };
 
@@ -62,20 +71,25 @@ const Attendance = ({ navigation }) => {
     // update the attendance in the database
 
     try {
-      await addDoc(collection(db, "attendance"), {
-        presentStudents,
-        absentStudents,
-        date: Timestamp.fromDate(new Date()),
-      });
+      await withLoading(async () => {
+        await addDoc(collection(db, "attendance"), {
+          presentStudents,
+          absentStudents,
+          date: Timestamp.fromDate(new Date()),
+        });
 
-      // show success message
-      Alert.alert("Success", "Attendance has been marked");
+        // show success message
+        Alert.alert("Success", "Attendance has been marked");
+        navigation.navigate("Teacherhome");
+      });
     } catch (error) {
       console.log(error);
+      Alert.alert("Error", "Failed to save attendance", [
+        {
+          text: "OK",
+        },
+      ]);
     }
-
-    // redirect to home screen
-    navigation.navigate("Teacherhome");
   };
 
   useEffect(() => {

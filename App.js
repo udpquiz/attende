@@ -14,8 +14,9 @@ import LeaveAppeals from "./src/screens/BrowseLeaveAppeals";
 import AppealLeave from "./src/screens/AppealLeave";
 import AttendanceRecord from "./src/screens/AttendanceRecord";
 import * as SecureStore from "expo-secure-store";
-
 import Attendanceinfo from "./src/screens/Attendanceinfo";
+import { LoaderProvider, useLoader } from "./src/context/LoaderContext";
+import Loader from "./src/components/Loader";
 import {
   useFonts,
   Poppins_800ExtraBold,
@@ -27,7 +28,9 @@ import {
 import AppLoading from "expo-app-loading";
 
 const Stack = createNativeStackNavigator();
-export default function App() {
+
+const AppContent = () => {
+  const { loading } = useLoader();
   const [date, setDate] = useState(null);
   const [defaultScreen, setDefaultScreen] = useState("Welcome");
 
@@ -41,9 +44,6 @@ export default function App() {
       } else {
         setDefaultScreen("Teacherhome");
       }
-      // navigation.navigate(
-      //   `${role === "parent" ? "Parenthome" : "Teacherhome"}`
-      // );
     }
   };
 
@@ -58,6 +58,7 @@ export default function App() {
       today.getDate();
     setDate(date);
   }, []);
+
   let [fontsLoaded] = useFonts({
     Poppins_800ExtraBold,
     Poppins_500Medium,
@@ -65,127 +66,140 @@ export default function App() {
     Poppins_400Regular,
     Poppins_300Light,
   });
+
   if (!fontsLoaded) {
     return <AppLoading />;
   }
+
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName={defaultScreen}>
-        <Stack.Screen
-          name="Attendance"
-          component={Takeattendance}
-          options={{
-            title: "Attendance: " + date,
-            headerStyle: {
-              backgroundColor: colors.primary,
-            },
-            headerTintColor: colors.white,
-          }}
-        />
+    <>
+      <Loader visible={loading} />
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName={defaultScreen}>
+          <Stack.Screen
+            name="Attendance"
+            component={Takeattendance}
+            options={{
+              title: "Attendance: " + date,
+              headerStyle: {
+                backgroundColor: colors.primary,
+              },
+              headerTintColor: colors.white,
+            }}
+          />
 
-        <>
+          <>
+            <Stack.Screen
+              name="Welcome"
+              component={Welcome}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="Loginp"
+              component={Loginparent}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="Logint"
+              component={Loginteacher}
+              options={{
+                headerShown: false,
+              }}
+            />
+          </>
           <Stack.Screen
-            name="Welcome"
-            component={Welcome}
+            name="Teacherhome"
+            component={Teacherhome}
             options={{
               headerShown: false,
             }}
           />
           <Stack.Screen
-            name="Loginp"
-            component={Loginparent}
+            name="Parenthome"
+            component={Parenthome}
             options={{
               headerShown: false,
             }}
           />
-          <Stack.Screen
-            name="Logint"
-            component={Loginteacher}
-            options={{
-              headerShown: false,
-            }}
-          />
-        </>
-        <Stack.Screen
-          name="Teacherhome"
-          component={Teacherhome}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name="Parenthome"
-          component={Parenthome}
-          options={{
-            headerShown: false,
-          }}
-        />
 
-        <Stack.Screen
-          name="Attendancerecord"
-          component={AttendanceRecord}
-          options={{
-            title: "Attendance record",
-            headerStyle: {
-              backgroundColor: colors.primary,
-            },
-            headerTintColor: colors.white,
-          }}
-        />
-        <Stack.Screen
-          name="CreateNotice"
-          component={CreateNotice}
-          options={{
-            title: "Create Notice",
-            headerStyle: {
-              backgroundColor: colors.primary,
-            },
-            headerTintColor: colors.white,
-          }}
-        />
-        <Stack.Screen
-          name="PreviousNotices"
-          component={PreviousNotices}
-          options={{
-            title: "Previous Notices",
-            headerStyle: {
-              backgroundColor: colors.primary,
-            },
-            headerTintColor: colors.white,
-          }}
-        />
-        <Stack.Screen
-          name="BrowseLeaveAppeals"
-          component={LeaveAppeals}
-          options={{
-            title: "Leave Appeals",
-            headerStyle: {
-              backgroundColor: colors.primary,
-            },
-            headerTintColor: colors.white,
-          }}
-        />
-        <Stack.Screen
-          name="AppealLeave"
-          component={AppealLeave}
-          options={{
-            title: "Appeal leave",
-            headerStyle: {
-              backgroundColor: colors.primary,
-            },
-            headerTintColor: colors.white,
-          }}
-        />
-        <Stack.Screen
-          name="Studentinfo"
-          component={Attendanceinfo}
-          options={{
-            title: "",
-            headerTransparent: true,
-            headerTintColor: colors.white,
-          }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+          <Stack.Screen
+            name="Attendancerecord"
+            component={AttendanceRecord}
+            options={{
+              title: "Attendance record",
+              headerStyle: {
+                backgroundColor: colors.primary,
+              },
+              headerTintColor: colors.white,
+            }}
+          />
+          <Stack.Screen
+            name="CreateNotice"
+            component={CreateNotice}
+            options={{
+              title: "Create Notice",
+              headerStyle: {
+                backgroundColor: colors.primary,
+              },
+              headerTintColor: colors.white,
+            }}
+          />
+          <Stack.Screen
+            name="PreviousNotices"
+            component={PreviousNotices}
+            options={{
+              title: "Previous Notices",
+              headerStyle: {
+                backgroundColor: colors.primary,
+              },
+              headerTintColor: colors.white,
+            }}
+          />
+          <Stack.Screen
+            name="BrowseLeaveAppeals"
+            component={LeaveAppeals}
+            options={{
+              title: "Leave Appeals",
+              headerStyle: {
+                backgroundColor: colors.primary,
+              },
+              headerTintColor: colors.white,
+            }}
+          />
+          <Stack.Screen
+            name="AppealLeave"
+            component={AppealLeave}
+            options={{
+              title: "Appeal leave",
+              headerStyle: {
+                backgroundColor: colors.primary,
+              },
+              headerTintColor: colors.white,
+            }}
+          />
+          <Stack.Screen
+            name="Studentinfo"
+            component={Attendanceinfo}
+            options={{
+              title: "",
+              headerTransparent: true,
+              headerTintColor: colors.white,
+            }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </>
+  );
+};
+
+export default function App() {
+  return (
+    <LoaderProvider>
+      <AppContent />
+    </LoaderProvider>
   );
 }

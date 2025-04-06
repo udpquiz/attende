@@ -15,6 +15,7 @@ import ForgotPasswordModal from "./ForgotPasswordModel";
 import { db } from "../../config/firebase";
 import { getDoc, collection, doc } from "firebase/firestore";
 import * as SecureStore from "expo-secure-store";
+import { useLoading } from "../hooks/useLoading";
 
 import styles from "../styles/login";
 
@@ -22,6 +23,7 @@ const Login = ({ navigation, role }) => {
   const [username, setUsername] = useState(null);
   const [password, setPassword] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const { withLoading } = useLoading();
 
   const save = async (key, value) => {
     await SecureStore.setItemAsync(key, value);
@@ -39,30 +41,43 @@ const Login = ({ navigation, role }) => {
       const usersRef = doc(db, "users", username);
 
       try {
-        const userSnap = await getDoc(usersRef);
-        if (userSnap.exists() && userSnap.data().role === role) {
-          if (userSnap.data().password === password) {
-            const id = userSnap.id;
-            const user = userSnap.data();
-            save("user", JSON.stringify({ ...user, id }));
+        await withLoading(async () => {
+          const userSnap = await getDoc(usersRef);
+          if (userSnap.exists() && userSnap.data().role === role) {
+            if (userSnap.data().password === password) {
+              const id = userSnap.id;
+              const user = userSnap.data();
+              await save("user", JSON.stringify({ ...user, id }));
 
-            //Reset the stack and navigate to the home screen
-            navigation.reset({
-              index: 0,
-              routes: [
-                { name: `${role === "parent" ? "Parenthome" : "Teacherhome"}` },
-              ],
-            });
+              //Reset the stack and navigate to the home screen
+              navigation.reset({
+                index: 0,
+                routes: [
+                  { name: `${role === "parent" ? "Parenthome" : "Teacherhome"}` },
+                ],
+              });
+            } else {
+              Alert.alert("Invalid credentials", "Invalid username or password", [
+                {
+                  text: "Cancel",
+                },
+              ]);
+            }
+          } else {
+            Alert.alert("Invalid credentials", "Invalid username or password", [
+              {
+                text: "Cancel",
+              },
+            ]);
           }
-        } else {
-          Alert.alert("Invalid credentials", "Invalid username or password", [
-            {
-              text: "Cancel",
-            },
-          ]);
-        }
+        });
       } catch (error) {
         console.log(error);
+        Alert.alert("Error", "An error occurred during login", [
+          {
+            text: "OK",
+          },
+        ]);
       }
     }
   };

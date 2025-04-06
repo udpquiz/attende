@@ -5,26 +5,35 @@ import { collection, addDoc, Timestamp } from "firebase/firestore";
 import { db } from "../../config/firebase";
 import * as SecureStore from "expo-secure-store";
 import { Alert } from "react-native";
+import { useLoading } from "../hooks/useLoading";
 
 const AppealLeave = () => {
   const [text, setText] = useState("");
   const [studentId, setStudentId] = useState("");
+  const { withLoading } = useLoading();
 
   const getToken = async () => {
     try {
-      const token = await SecureStore.getItemAsync("user");
-      if (token) {
-        console.log(JSON.parse(token));
-        setStudentId(JSON.parse(token).id);
-      }
+      await withLoading(async () => {
+        const token = await SecureStore.getItemAsync("user");
+        if (token) {
+          console.log(JSON.parse(token));
+          setStudentId(JSON.parse(token).id);
+        }
+      });
     } catch (err) {
       console.log(err);
+      Alert.alert("Error", "Failed to get user information", [
+        {
+          text: "OK",
+        },
+      ]);
     }
   };
 
   useEffect(() => {
     getToken();
-  });
+  }, []);
 
   const handleSubmit = async () => {
     if (text.length === 0) {
@@ -32,24 +41,25 @@ const AppealLeave = () => {
       return;
     }
 
-    console.log({
-      student: studentId,
-      message: text,
-      date: Timestamp.fromDate(new Date()),
-      status: "",
-    });
     try {
-      await addDoc(collection(db, "leave_appeals"), {
-        student: studentId,
-        message: text,
-        date: Timestamp.fromDate(new Date()),
-        status: "",
-      });
+      await withLoading(async () => {
+        await addDoc(collection(db, "leave_appeals"), {
+          student: studentId,
+          message: text,
+          date: Timestamp.fromDate(new Date()),
+          status: "",
+        });
 
-      Alert.alert("Success", "Your appeal has been sent");
-      setText("");
+        Alert.alert("Success", "Your appeal has been sent");
+        setText("");
+      });
     } catch (err) {
       console.log(err);
+      Alert.alert("Error", "Failed to send appeal", [
+        {
+          text: "OK",
+        },
+      ]);
     }
   };
 

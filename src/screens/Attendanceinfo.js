@@ -97,7 +97,7 @@ const Attendanceinfo = ({ route }) => {
       <View style={styles.contactbox}>
         <View style={styles.contact}>
           <Pressable
-            onPress={() => Linking.openURL(`tel:+977 ${phone_no}`)}
+            onPress={() => Linking.openURL(`tel: ${phone_no}`)}
             style={styles.modalContact}
           >
             <View style={styles.contactItem}>
@@ -106,7 +106,7 @@ const Attendanceinfo = ({ route }) => {
                 size={20}
                 color={colors.lightBlack}
               />
-              <Text style={styles.txt}>{`+977 ${phone_no}`}</Text>
+              <Text style={styles.txt}>{`${phone_no}`}</Text>
             </View>
           </Pressable>
 
