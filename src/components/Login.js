@@ -53,7 +53,7 @@ const Login = ({ navigation, role }) => {
               navigation.reset({
                 index: 0,
                 routes: [
-                  { name: `${role === "parent" ? "Parenthome" : "Teacherhome"}` },
+                  { name: `${role === "student" ? "Studenthome" : "Teacherhome"}` },
                 ],
               });
             } else {
@@ -93,10 +93,10 @@ const Login = ({ navigation, role }) => {
       >
         <SafeAreaView style={{ flex: 1 }}>
           <View style={styles.Box}>
-            {role == "parent" && (
+            {role == "student" && (
               <Image
                 style={styles.img}
-                source={require("../../assets/parent.png")}
+                source={require("../../assets/student.png")}
               />
             )}
             {role == "teacher" && (

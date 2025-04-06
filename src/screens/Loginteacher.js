@@ -9,7 +9,7 @@ import {
 import AppLoading from "expo-app-loading";
 import Login from "../components/Login";
 
-function Loginparent({ navigation }) {
+function Loginstudent({ navigation }) {
   let [fontsLoaded] = useFonts({
     Poppins_800ExtraBold,
     Poppins_500Medium,
@@ -22,4 +22,4 @@ function Loginparent({ navigation }) {
   return <Login navigation={navigation}  role="teacher" navv="Teacherhome"/>;
 }
 
-export default Loginparent;
+export default Loginstudent;

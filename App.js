@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Loginparent from "./src/screens/Loginparent";
+import Loginstudent from "./src/screens/Loginstudent";
 import Loginteacher from "./src/screens/Loginteacher";
 import Welcome from "./src/screens/Welcome";
 import colors from "./config/colors";
@@ -7,7 +7,7 @@ import Teacherhome from "./src/screens/Teacherhome";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Takeattendance from "./src/screens/TakeAttendance";
-import Parenthome from "./src/screens/Parenthome";
+import Studenthome from "./src/screens/Studenthome";
 import CreateNotice from "./src/screens/CreateNotice";
 import PreviousNotices from "./src/screens/PreviousNotices";
 import LeaveAppeals from "./src/screens/BrowseLeaveAppeals";
@@ -39,8 +39,8 @@ const AppContent = () => {
     if (token) {
       console.log(token);
       const role = JSON.parse(token).role;
-      if (role === "parent") {
-        setDefaultScreen("Parenthome");
+      if (role === "student") {
+        setDefaultScreen("Studenthome");
       } else {
         setDefaultScreen("Teacherhome");
       }
@@ -97,8 +97,8 @@ const AppContent = () => {
               }}
             />
             <Stack.Screen
-              name="Loginp"
-              component={Loginparent}
+              name="Logins"
+              component={Loginstudent}
               options={{
                 headerShown: false,
               }}
@@ -119,8 +119,8 @@ const AppContent = () => {
             }}
           />
           <Stack.Screen
-            name="Parenthome"
-            component={Parenthome}
+            name="Studenthome"
+            component={Studenthome}
             options={{
               headerShown: false,
             }}

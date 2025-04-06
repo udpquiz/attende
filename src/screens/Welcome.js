@@ -7,9 +7,9 @@ function Welcome({ navigation }) {
     <SafeAreaView style={styles.maincontainer}>
       <Text style={styles.head}>Login as</Text>
       <LoginAs
-        role="A parent"
-        image={require("../../assets/parent1.png")}
-        onPress={() => navigation.navigate("Loginp")}
+        role="A student"
+        image={require("../../assets/student1.png")}
+        onPress={() => navigation.navigate("Logins")}
         navigation={navigation}
       />
       <LoginAs

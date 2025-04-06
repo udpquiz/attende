@@ -4,7 +4,7 @@ export default {
   white: "#fff",
   black: "#000",
   shadow: "#666",
-  parentHome: "#0991F6",
+  studentHome: "#0991F6",
   green: "#2ECD6E",
   blue:'#212E5B',
   red: "#F76D23",
@@ -12,5 +12,4 @@ export default {
   lightPrimary: "rgba(9, 145, 246, 0.25)",
   lightGreen: "rgba(46, 205, 110, 0.5)",
   lightRed: "rgba(247, 109, 35, 0.5)",
-
 };

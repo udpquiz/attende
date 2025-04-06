@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
   },
   container: {
-    backgroundColor: colors.parentHome,
+    backgroundColor: colors.studentHome,
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
     alignItems: "center",
   },

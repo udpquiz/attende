@@ -1,11 +1,11 @@
 import { View, Text, Image, LogBox } from "react-native";
 import { useState, useEffect } from "react";
-import * as SecureStore from "expo-secure-store";
 import styles from "../styles/home";
 import Logout from "../components/Logout";
 import NavItem from "../components/NavItem";
+import * as SecureStore from "expo-secure-store";
 
-export default function Parenthome({ navigation }) {
+export default function Studenthome({ navigation }) {
   const [student, setStudent] = useState("");
 
   const getToken = async () => {

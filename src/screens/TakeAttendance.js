@@ -30,7 +30,7 @@ const Attendance = ({ navigation }) => {
         // query to fetch only student data
         const q = query(
           collection(db, "users"),
-          where("role", "==", "parent"),
+          where("role", "==", "student"),
           orderBy("roll_no", "asc")
         );
 
